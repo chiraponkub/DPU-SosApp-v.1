@@ -1,0 +1,13 @@
+version: '3'
+
+services:
+  rdbms:
+    image: postgres
+    environment:
+      POSTGRES_DB: postgres_db
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: pgpassword
+    volumes:
+      - './.postgresql/:/var/lib/postgresql'
+    ports:
+      - '5432:5432'

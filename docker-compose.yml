@@ -11,3 +11,13 @@ services:
       - './.postgresql/:/var/lib/postgresql'
     ports:
       - '5432:5432'
+  api:
+    build:
+      context: .
+      dockerfile: Dockerfile-Local
+    environment:
+      - GORM_HOST=rdbms
+    volumes:
+      - './:/SosApp'
+    ports:
+      - "80:80"

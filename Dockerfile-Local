@@ -1,14 +1,20 @@
-FROM golang:1.18
+FROM golang:1.18-alpine AS build_stage
 
-WORKDIR /usr/src/app
+RUN apk update && apk upgrade && apk add --no-cache build-base bash git openssh
+LABEL maintainer="Chirapon Hemtrakan <chirapon.job@gmail.com>"
 
-# pre-copy/cache go.mod for pre-downloading dependencies and only redownloading them in subsequent builds if they change
-COPY go.mod go.sum ./
-RUN go mod download && go mod verify
+ENV PACKAGE_PATH=SosApp
+RUN mkdir -p /go/src/
+WORKDIR /go/src/$PACKAGE_PATH
 
-COPY . .
-RUN go build -v -o /usr/local/bin/app ./...
+COPY . /go/src/$PACKAGE_PATH/
+RUN go mod download
+RUN go get github.com/pilu/fresh
 
+RUN go build -o bin/SosApp
 
-EXPOSE 8000
-CMD ["app"]
+ENV GO_ENV="dev"
+
+ENTRYPOINT ./bin/SosApp
+EXPOSE 80
+CMD ["sh", "-c", "fresh"]

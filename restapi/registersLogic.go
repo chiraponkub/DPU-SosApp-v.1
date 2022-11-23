@@ -1,0 +1,146 @@
+package restapi
+
+import (
+	"errors"
+	"github.com/chiraponkub/DPU-SosApp-v.1.git/common"
+	"github.com/chiraponkub/DPU-SosApp-v.1.git/restapi/model/singup/request"
+	response "github.com/chiraponkub/DPU-SosApp-v.1.git/restapi/model/singup/response"
+	rdbmsstructure "github.com/chiraponkub/DPU-SosApp-v.1.git/restapi/structureDAO"
+	"github.com/chiraponkub/DPU-SosApp-v.1.git/utility/verify"
+	"github.com/google/uuid"
+	"math/rand"
+	"strconv"
+	"time"
+)
+
+func rangeIn(low, hi int) int {
+	return low + rand.Intn(hi-low)
+}
+
+var letterRunes = []rune("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ")
+
+func RandStringRunes(n int) string {
+	b := make([]rune, n)
+	for i := range b {
+		b[i] = letterRunes[rand.Intn(len(letterRunes))]
+	}
+	return string(b)
+}
+
+func (ctrl Controller) SentOTPLogic(req *request.PhoneNumber) (res response.OTP, Error error) {
+	Check, err := common.CheckPhoneNumber(req.PhoneNumber)
+	if !Check {
+		Error = errors.New("PhoneNumber Invalid. : 10 Numbers 0-9")
+		return
+	}
+	if err != nil {
+		Error = err
+		return
+	}
+
+	var OTP int
+	for {
+		OTP = rangeIn(0000, 9999)
+		if len(strconv.Itoa(OTP)) == 4 {
+			break
+		}
+	}
+
+	rand.Seed(time.Now().UnixNano())
+	VerifyCode := ""
+	charset := "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789"
+	i := 0
+	for {
+		c := charset[rand.Intn(len(charset))]
+		VerifyCode = VerifyCode + string(c)
+		if i == 4 {
+			break
+		}
+		i++
+	}
+
+	newReq := rdbmsstructure.OTP{
+		PhoneNumber: req.PhoneNumber,
+		Key:         OTP,
+		VerifyCode:  VerifyCode, //todo ทำต่อ โดนการทำการสุ่มค่าออกมาเป็นตัวหนังสือ
+		Expired:     time.Now().Add(time.Minute * 3).Add(time.Hour * 7),
+		Active:      true,
+	}
+
+	err = ctrl.Access.RDBMS.SendOTPDB(newReq)
+	if err != nil {
+		Error = err
+		return
+	}
+	res.OTP = OTP
+	res.VerifyCode = VerifyCode
+	return
+}
+
+func (ctrl Controller) VerifyOTPLogic(req *request.OTP) (Error error) {
+	checkNumber, err := common.CheckPhoneNumber(req.PhoneNumber)
+	if !checkNumber {
+		Error = err
+		return
+	}
+	checkOTPLen, err := common.CheckOTPLen(req.OTP)
+	if !checkOTPLen {
+		Error = err
+		return
+	}
+	newReq := rdbmsstructure.OTP{
+		PhoneNumber: req.PhoneNumber,
+		Key:         req.OTP,
+		VerifyCode:  req.VerifyCode,
+	}
+
+	res, err := ctrl.Access.RDBMS.GetOTPDB(newReq)
+	if err != nil {
+		Error = err
+		return
+	}
+	t1 := time.Now().Add(time.Hour * 7)
+	t2 := res.Expired
+	diff := t2.Sub(t1).Seconds()
+	if int(diff) < 0 {
+		Error = errors.New("รหัส OTP หมดอายุ")
+		return
+	}
+
+	if res.Active != true || res.VerifyCode != req.VerifyCode || res.PhoneNumber != req.PhoneNumber || res.Key != req.OTP {
+		Error = errors.New("รหัส OTP ไม่ถูกต้อง")
+		return
+	}
+
+	return
+}
+
+func (ctrl Controller) CreateUserLogin(req *request.Account) (Error error) {
+	if req.Password == req.ConfirmPassword {
+		Error = errors.New("รหัสผ่านไม่ตรงกัน")
+		return
+	}
+
+	hashPass, err := verify.Hash(req.Password)
+
+	newReq := rdbmsstructure.Account{
+		UserID:      uuid.New(),
+		Email:       &req.Email,
+		Password:    string(hashPass),
+		FirstName:   req.FirstName,
+		LastName:    req.LastName,
+		PhoneNumber: req.PhoneNumber,
+		Birthday:    req.Birthday,
+		Gender:      req.Gender,
+		IDCard:      req.IDCard,
+		Photo:       nil,
+		RoleID:      uuid.UUID{},
+	}
+
+	err = ctrl.Access.RDBMS.CreateUserDB(newReq)
+	if err != nil {
+		Error = err
+		return
+	}
+	return
+}

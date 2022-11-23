@@ -5,6 +5,12 @@ import (
 	"net/http"
 )
 
+type RespMag struct {
+	Code string      `json:"code"`
+	Msg  string      `json:"msg"`
+	Data interface{} `json:"data,omitempty"`
+}
+
 func EchoSucceed(c echo.Context, msg interface{}) error {
 	return c.JSON(http.StatusOK, msg)
 }

@@ -2,11 +2,11 @@ package restapi
 
 import (
 	"errors"
-	"github.com/chiraponkub/DPU-SosApp-v.1.git/restapi/structure"
+	"github.com/chiraponkub/DPU-SosApp-v.1.git/restapi/structureDAO"
 	"gorm.io/gorm"
 )
 
-func (factory GORMFactory) AddRoleDB(req structure.Role) (Error error) {
+func (factory GORMFactory) AddRoleDB(req structureDAO.Role) (Error error) {
 	err := factory.client.Session(&gorm.Session{FullSaveAssociations: true}).Save(&req).Error
 	if err != nil {
 		if !errors.Is(err, gorm.ErrRegistered) {
@@ -17,8 +17,8 @@ func (factory GORMFactory) AddRoleDB(req structure.Role) (Error error) {
 	return
 }
 
-func (factory GORMFactory) GetRoleListDB() (response []structure.Role, Error error) {
-	var data []structure.Role
+func (factory GORMFactory) GetRoleListDB() (response []structureDAO.Role, Error error) {
+	var data []structureDAO.Role
 	err := factory.client.Find(&data).Error
 	if err != nil {
 		if !errors.Is(err, gorm.ErrRecordNotFound) {
@@ -33,8 +33,8 @@ func (factory GORMFactory) GetRoleListDB() (response []structure.Role, Error err
 	return
 }
 
-func (factory GORMFactory) GetRoleDB(req structure.Role) (response structure.Role, Error error) {
-	var data structure.Role
+func (factory GORMFactory) GetRoleDB(req structureDAO.Role) (response structureDAO.Role, Error error) {
+	var data structureDAO.Role
 	err := factory.client.Where("name = ?", req.Name).First(&data).Error
 	if err != nil {
 		if !errors.Is(err, gorm.ErrRecordNotFound) {

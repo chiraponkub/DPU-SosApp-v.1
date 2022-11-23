@@ -1,7 +1,6 @@
 package structureDAO
 
 import (
-	"github.com/google/uuid"
 	"gorm.io/gorm"
 )
 
@@ -13,5 +12,4 @@ type Address struct {
 	Province    string
 	PostalCode  string
 	Country     string
-	UserID      uuid.UUID
 }

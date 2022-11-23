@@ -34,27 +34,7 @@ func (ctrl Controller) AddRole(c echo.Context) error {
 }
 
 func (ctrl Controller) GetRoleList(c echo.Context) error {
-	var request = new(request.AddRole)
 	responses, err := ctrl.GetRoleListCon()
-	if len(responses.GetRoleList) == 0 {
-		i := 0
-		for {
-			if i == 0 {
-				request.Name = "user"
-			} else {
-				request.Name = "admin"
-			}
-			err = ctrl.AddRoleCon(request)
-			if err != nil {
-				return response.EchoError(c, 400, err.Error())
-			}
-			i++
-			if i == 2 {
-				break
-			}
-		}
-	}
-	responses, err = ctrl.GetRoleListCon()
 	if err != nil {
 		return response.EchoError(c, 400, err.Error())
 	}

@@ -5,12 +5,14 @@ import (
 	"fmt"
 	"github.com/Netflix/go-env"
 	"github.com/chiraponkub/DPU-SosApp-v.1.git/restapi/structureDAO"
+	"github.com/chiraponkub/DPU-SosApp-v.1.git/utility/verify"
 	"github.com/go-playground/validator"
 	config "github.com/spf13/viper"
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
 	"os"
 	"sync"
+	"time"
 )
 
 var (
@@ -65,6 +67,46 @@ func gormInstance(env *Properties) GORMFactory {
 		&structureDAO.OTP{},
 		&structureDAO.LogLogin{},
 	)
+
+	var CheckRole []structureDAO.Role
+	db.Find(&CheckRole)
+	if len(CheckRole) == 0 {
+		dataAdmin := structureDAO.Role{
+			Name: "admin",
+		}
+		dataUser := structureDAO.Role{
+			Name: "user",
+		}
+		db.Session(&gorm.Session{FullSaveAssociations: true}).Save(&dataAdmin)
+		db.Session(&gorm.Session{FullSaveAssociations: true}).Save(&dataUser)
+
+		role := structureDAO.Role{}
+		address := structureDAO.Address{
+			Address:     "",
+			SubDistrict: "",
+			District:    "",
+			Province:    "",
+			PostalCode:  "",
+			Country:     "",
+		}
+		db.Session(&gorm.Session{FullSaveAssociations: true}).Save(&address)
+		db.Where("name = ?", "admin").Take(&role)
+		Password, _ := verify.Hash("BELLkub4424506")
+		data := structureDAO.Account{
+			Email:       nil,
+			PhoneNumber: "0815476439",
+			Password:    string(Password),
+			FirstName:   "admin",
+			LastName:    "admin",
+			Birthday:    time.Now(),
+			Gender:      "M",
+			IDCard:      "1349900833347",
+			Photo:       nil,
+			RoleID:      role.ID,
+			AddressID:   &address.ID,
+		}
+		db.Session(&gorm.Session{FullSaveAssociations: true}).Save(&data)
+	}
 	return GORMFactory{env: env, client: db}
 }
 

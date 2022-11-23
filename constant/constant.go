@@ -13,3 +13,8 @@ const (
 	Length   string = "len"
 	Numeric  string = "numeric"
 )
+
+const (
+	User  string = "user"
+	Admin string = "admin"
+)

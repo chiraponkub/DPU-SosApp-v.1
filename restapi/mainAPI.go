@@ -19,8 +19,8 @@ func NewControllerMain(ctrl Controller) {
 	//r := e.Group(config.GetString("service.endpoint"))
 	r.POST("/sendOTP", ctrl.SendOTP)
 	r.POST("/verifyOTP", ctrl.VerifyOTP)
-	r.POST("/signIn", ctrl.SignInUser)
 	r.POST("/createUser", ctrl.CreateUser)
+	r.POST("/signIn", ctrl.SignInUser)
 	// "/user"
 	u := r.Group(config.GetString("role.user"))
 	{

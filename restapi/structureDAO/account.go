@@ -1,29 +1,28 @@
 package structureDAO
 
 import (
-	"github.com/google/uuid"
 	"gorm.io/gorm"
 	"time"
 )
 
 type Account struct {
 	gorm.Model
-	UserID      uuid.UUID `gorm:"uniqueIndex"`
 	Email       *string
 	PhoneNumber string
 	Password    string
 	FirstName   string
 	LastName    string
-	Birthday    string
+	Birthday    time.Time
 	Gender      string
 	IDCard      string
 	Photo       *string
-	RoleID      uuid.UUID
+	RoleID      uint
+	AddressID   *uint
 }
 
 type LogLogin struct {
 	gorm.Model
-	UserID uuid.UUID
+	UserID uint
 	System string
 	IP     string
 }

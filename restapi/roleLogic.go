@@ -6,7 +6,6 @@ import (
 	"github.com/chiraponkub/DPU-SosApp-v.1.git/restapi/model/role/request"
 	response "github.com/chiraponkub/DPU-SosApp-v.1.git/restapi/model/role/response"
 	rdbmsstructure "github.com/chiraponkub/DPU-SosApp-v.1.git/restapi/structureDAO"
-	"github.com/google/uuid"
 	"strings"
 )
 
@@ -21,8 +20,7 @@ func (ctrl Controller) AddRoleCon(req *request.AddRole) (Error error) {
 	}
 
 	role := rdbmsstructure.Role{
-		Name:   req.Name,
-		RoleID: uuid.New(),
+		Name: req.Name,
 	}
 	err = ctrl.Access.RDBMS.AddRoleDB(role)
 	if err != nil {

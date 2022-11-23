@@ -7,7 +7,6 @@ import (
 	response "github.com/chiraponkub/DPU-SosApp-v.1.git/restapi/model/singup/response"
 	rdbmsstructure "github.com/chiraponkub/DPU-SosApp-v.1.git/restapi/structureDAO"
 	"github.com/chiraponkub/DPU-SosApp-v.1.git/utility/verify"
-	"github.com/google/uuid"
 	"math/rand"
 	"strconv"
 	"time"
@@ -124,7 +123,6 @@ func (ctrl Controller) CreateUserLogin(req *request.Account) (Error error) {
 	hashPass, err := verify.Hash(req.Password)
 
 	newReq := rdbmsstructure.Account{
-		UserID:      uuid.New(),
 		Email:       &req.Email,
 		Password:    string(hashPass),
 		FirstName:   req.FirstName,
@@ -134,7 +132,7 @@ func (ctrl Controller) CreateUserLogin(req *request.Account) (Error error) {
 		Gender:      req.Gender,
 		IDCard:      req.IDCard,
 		Photo:       nil,
-		RoleID:      uuid.UUID{},
+		RoleID:      req.RoleID,
 	}
 
 	err = ctrl.Access.RDBMS.CreateUserDB(newReq)

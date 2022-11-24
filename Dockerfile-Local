@@ -13,7 +13,7 @@ RUN go get github.com/pilu/fresh
 
 RUN go build -o bin/SosApp
 
-ENV GO_ENV="dev"
+ENV ENV="dev"
 
 ENTRYPOINT ./bin/SosApp
 EXPOSE 80

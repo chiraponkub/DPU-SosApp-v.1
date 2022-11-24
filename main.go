@@ -1,7 +1,6 @@
 package main
 
 import (
-	"fmt"
 	"github.com/chiraponkub/DPU-SosApp-v.1.git/restapi"
 	"os"
 	"os/signal"
@@ -14,7 +13,6 @@ func main() {
 	if err != nil {
 		panic("LoadConfigFile from yml file error: " + err.Error())
 	}
-	fmt.Println("    ")
 
 	sign := make(chan os.Signal, 1)
 	signal.Notify(sign, os.Interrupt, os.Kill)

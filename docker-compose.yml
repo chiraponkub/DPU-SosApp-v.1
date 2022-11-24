@@ -14,7 +14,7 @@ services:
   api:
     build:
       context: .
-      dockerfile: Dockerfile-Local
+      dockerfile: Dockerfile
     environment:
       - GORM_HOST=rdbms
     volumes:

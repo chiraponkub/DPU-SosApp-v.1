@@ -12,7 +12,7 @@ RUN go mod download
 
 RUN go build -o bin/SosApp
 
-ENV GO_ENV="dev"
+ENV ENV="dev"
 
 ENTRYPOINT ./bin/SosApp
 EXPOSE 80

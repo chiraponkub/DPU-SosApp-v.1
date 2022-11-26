@@ -33,9 +33,25 @@ func (factory GORMFactory) GetRoleListDB() (response []structureDAO.Role, Error 
 	return
 }
 
-func (factory GORMFactory) GetRoleDB(req structureDAO.Role) (response structureDAO.Role, Error error) {
+func (factory GORMFactory) GetRoleDBByName(req structureDAO.Role) (response structureDAO.Role, Error error) {
 	var data structureDAO.Role
 	err := factory.client.Where("name = ?", req.Name).First(&data).Error
+	if err != nil {
+		if !errors.Is(err, gorm.ErrRecordNotFound) {
+			Error = err
+			return
+		} else {
+			Error = errors.New("record not found")
+			return
+		}
+	}
+	response = data
+	return
+}
+
+func (factory GORMFactory) GetRoleDBById(req structureDAO.Role) (response structureDAO.Role, Error error) {
+	var data structureDAO.Role
+	err := factory.client.Where("id = ?", req.ID).First(&data).Error
 	if err != nil {
 		if !errors.Is(err, gorm.ErrRecordNotFound) {
 			Error = err

@@ -13,7 +13,7 @@ func (ctrl Controller) AddRoleCon(req *request.AddRole) (Error error) {
 	var newReq rdbmsstructure.Role
 	newReq.Name = strings.ToLower(req.Name)
 
-	res, err := ctrl.Access.RDBMS.GetRoleDB(newReq)
+	res, err := ctrl.Access.RDBMS.GetRoleDBByName(newReq)
 	if res.Name == req.Name {
 		Error = errors.New("มี Role นี้ในระบบแล้ว")
 		return

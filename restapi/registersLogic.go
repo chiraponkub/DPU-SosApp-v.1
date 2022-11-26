@@ -16,16 +16,6 @@ func rangeIn(low, hi int) int {
 	return low + rand.Intn(hi-low)
 }
 
-var letterRunes = []rune("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ")
-
-func RandStringRunes(n int) string {
-	b := make([]rune, n)
-	for i := range b {
-		b[i] = letterRunes[rand.Intn(len(letterRunes))]
-	}
-	return string(b)
-}
-
 func (ctrl Controller) SentOTPLogic(req *request.PhoneNumber) (res response.OTP, Error error) {
 	Check, err := common.CheckPhoneNumber(req.PhoneNumber)
 	if !Check {
@@ -61,7 +51,7 @@ func (ctrl Controller) SentOTPLogic(req *request.PhoneNumber) (res response.OTP,
 	newReq := rdbmsstructure.OTP{
 		PhoneNumber: req.PhoneNumber,
 		Key:         OTP,
-		VerifyCode:  VerifyCode, //todo ทำต่อ โดนการทำการสุ่มค่าออกมาเป็นตัวหนังสือ
+		VerifyCode:  VerifyCode,
 		Expired:     time.Now().Add(time.Minute * 3).Add(time.Hour * 7),
 		Active:      true,
 	}
@@ -115,6 +105,19 @@ func (ctrl Controller) VerifyOTPLogic(req *request.OTP) (Error error) {
 }
 
 func (ctrl Controller) CreateUserLogin(req *request.Account) (Error error) {
+
+	db := rdbmsstructure.OTP{
+		PhoneNumber: req.PhoneNumber,
+		Key:         req.Key,
+		VerifyCode:  req.VerifyCode,
+	}
+
+	err := ctrl.Access.RDBMS.UpdateOTPDB(db)
+	if err != nil {
+		Error = err
+		return
+	}
+
 	if req.Password == req.ConfirmPassword {
 		Error = errors.New("รหัสผ่านไม่ตรงกัน")
 		return

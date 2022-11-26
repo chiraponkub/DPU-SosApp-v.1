@@ -2,13 +2,13 @@ package restapi
 
 import (
 	"github.com/chiraponkub/DPU-SosApp-v.1.git/constant"
-	"github.com/chiraponkub/DPU-SosApp-v.1.git/restapi/model/singup/request"
+	singup "github.com/chiraponkub/DPU-SosApp-v.1.git/restapi/model/singup/request"
 	"github.com/chiraponkub/DPU-SosApp-v.1.git/utility/response"
 	"github.com/labstack/echo/v4"
 )
 
 func (ctrl Controller) SendOTP(c echo.Context) error {
-	var request = new(request.PhoneNumber)
+	var request = new(singup.PhoneNumber)
 	var res response.RespMag
 	err := c.Bind(request)
 	if err != nil {
@@ -35,7 +35,7 @@ func (ctrl Controller) SendOTP(c echo.Context) error {
 }
 
 func (ctrl Controller) VerifyOTP(c echo.Context) error {
-	var request = new(request.OTP)
+	var request = new(singup.OTP)
 	var res response.RespMag
 	err := c.Bind(request)
 	if err != nil {
@@ -65,7 +65,7 @@ func (ctrl Controller) VerifyOTP(c echo.Context) error {
 }
 
 func (ctrl Controller) CreateUser(c echo.Context) error {
-	var request = new(request.Account)
+	var request = new(singup.Account)
 	var res response.RespMag
 	err := c.Bind(request)
 	if err != nil {
@@ -91,14 +91,4 @@ func (ctrl Controller) CreateUser(c echo.Context) error {
 	res.Data = "Succeed"
 	return response.EchoSucceed(c, res)
 
-}
-
-func (ctrl Controller) SignInUser(c echo.Context) error {
-
-	return response.EchoSucceed(c, "")
-}
-
-func (ctrl Controller) SignUpAdmin(c echo.Context) error {
-
-	return response.EchoSucceed(c, "")
 }

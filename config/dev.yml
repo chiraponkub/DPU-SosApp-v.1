@@ -9,3 +9,7 @@ token:
 role:
   user: "/user"
   admin: "/admin"
+
+
+jwt:
+  secret: "SosApp"

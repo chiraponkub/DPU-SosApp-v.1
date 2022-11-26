@@ -40,6 +40,27 @@ func (factory GORMFactory) GetOTPDB(req structureDAO.OTP) (response *structureDA
 	return
 }
 
+func (factory GORMFactory) UpdateOTPDB(req structureDAO.OTP) (Error error) {
+	var data structureDAO.OTP
+	db := factory.client.Where("phone_number = ? and key = ? and verify_code = ? and active = ?", req.Key, req.VerifyCode, true).Take(&data).Error
+	if db != nil {
+		if !errors.Is(db, gorm.ErrRecordNotFound) {
+			Error = db
+			return
+		} else {
+			Error = errors.New("record not found")
+			return
+		}
+	}
+
+	data.Active = false
+	db = factory.client.Save(&data).Error
+	if db != nil {
+		return db
+	}
+	return
+}
+
 func (factory GORMFactory) CreateUserDB(req structureDAO.Account) (Error error) {
 	err := factory.client.Session(&gorm.Session{FullSaveAssociations: true}).Save(&req).Error
 	if err != nil {

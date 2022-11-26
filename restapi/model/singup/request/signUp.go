@@ -24,4 +24,6 @@ type Account struct {
 	IDCard          string    `json:"idCard,omitempty" validate:"required"`
 	RoleID          uint      `json:"roleID,omitempty" validate:"required"`
 	Email           string    `json:"email,omitempty"`
+	Key             int       `json:"key,omitempty" validate:"required"`
+	VerifyCode      string    `json:"verifyCode,omitempty" validate:"required"`
 }

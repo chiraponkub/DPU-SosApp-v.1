@@ -23,15 +23,20 @@ var (
 type FactoryInterface interface {
 	//Role
 	GetRoleListDB() (response []structureDAO.Role, Error error)
-	GetRoleDB(req structureDAO.Role) (response structureDAO.Role, Error error)
+	GetRoleDBByName(req structureDAO.Role) (response structureDAO.Role, Error error)
+	GetRoleDBById(req structureDAO.Role) (response structureDAO.Role, Error error)
 	AddRoleDB(req structureDAO.Role) (Error error)
 
 	// OTP
 	SendOTPDB(req structureDAO.OTP) (Error error)
 	GetOTPDB(req structureDAO.OTP) (response *structureDAO.OTP, Error error)
+	UpdateOTPDB(req structureDAO.OTP) (Error error)
 
 	// CreateUser
 	CreateUserDB(req structureDAO.Account) (Error error)
+
+	// Account
+	GetAccountDB(req structureDAO.Account) (response *structureDAO.Account, Error error)
 }
 
 func Create(env *Properties) FactoryInterface {
@@ -155,10 +160,10 @@ type Properties struct {
 
 	// -- Gorm
 	//GormHost string `env:"GORM_HOST,default=access"`
-	GormHost string `env:"GORM_HOST,default=localhost"`
+	GormHost string `env:"GORM_HOST,default=sosapp.ch2h0tcvltmv.ap-southeast-1.rds.amazonaws.com"`
 	//GormHost string `env:"GORM_HOST,default=access"`
 	GormPort string `env:"GORM_PORT,default=5432"`
-	GormName string `env:"GORM_NAME,default=postgres_db"`
+	GormName string `env:"GORM_NAME,default=postgresdb"`
 	GormUser string `env:"GORM_USER,default=postgres"`
 	GormPass string `env:"GORM_PASS,default=pgpassword"`
 }

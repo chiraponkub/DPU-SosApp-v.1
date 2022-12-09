@@ -42,7 +42,7 @@ func (factory GORMFactory) GetOTPDB(req structureDAO.OTP) (response *structureDA
 
 func (factory GORMFactory) UpdateOTPDB(req structureDAO.OTP) (Error error) {
 	var data structureDAO.OTP
-	db := factory.client.Where("phone_number = ? and key = ? and verify_code = ? and active = ?", req.Key, req.VerifyCode, true).Take(&data).Error
+	db := factory.client.Where("phone_number = ? and key = ? and verify_code = ? and active = ?", req.PhoneNumber, req.Key, req.VerifyCode, true).Take(&data).Error
 	if db != nil {
 		if !errors.Is(db, gorm.ErrRecordNotFound) {
 			Error = db

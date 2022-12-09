@@ -118,7 +118,7 @@ func (ctrl Controller) CreateUserLogin(req *request.Account) (Error error) {
 		return
 	}
 
-	if req.Password == req.ConfirmPassword {
+	if req.Password != req.ConfirmPassword {
 		Error = errors.New("รหัสผ่านไม่ตรงกัน")
 		return
 	}
@@ -126,16 +126,16 @@ func (ctrl Controller) CreateUserLogin(req *request.Account) (Error error) {
 	hashPass, err := verify.Hash(req.Password)
 
 	newReq := rdbmsstructure.Account{
-		Email:       &req.Email,
+		PhoneNumber: req.PhoneNumber,
 		Password:    string(hashPass),
 		FirstName:   req.FirstName,
 		LastName:    req.LastName,
-		PhoneNumber: req.PhoneNumber,
-		Birthday:    req.Birthday,
-		Gender:      req.Gender,
-		IDCard:      req.IDCard,
-		Photo:       nil,
-		RoleID:      req.RoleID,
+		Email:       &req.Email,
+		//Birthday:    req.Birthday,
+		Gender: req.Gender,
+		IDCard: req.IDCard,
+		Photo:  nil,
+		RoleID: req.RoleID,
 	}
 
 	err = ctrl.Access.RDBMS.CreateUserDB(newReq)

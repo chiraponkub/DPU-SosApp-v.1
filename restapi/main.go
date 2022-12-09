@@ -160,7 +160,7 @@ type Properties struct {
 
 	// -- Gorm
 	//GormHost string `env:"GORM_HOST,default=access"`
-	GormHost string `env:"GORM_HOST,default=sosapp.ch2h0tcvltmv.ap-southeast-1.rds.amazonaws.com"`
+	GormHost string `env:"GORM_HOST,default=localhost"`
 	//GormHost string `env:"GORM_HOST,default=access"`
 	GormPort string `env:"GORM_PORT,default=5432"`
 	GormName string `env:"GORM_NAME,default=postgresdb"`
@@ -178,7 +178,7 @@ func Build() *Properties {
 
 func (ctrl Controller) LoadConfigFile() error {
 	env := os.Getenv("ENV")
-	//env = "dev"
+	env = "dev"
 	if env == "" {
 		env = os.Args[1]
 	}

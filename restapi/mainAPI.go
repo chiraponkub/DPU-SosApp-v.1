@@ -1,10 +1,13 @@
 package restapi
 
 import (
+	"github.com/chiraponkub/DPU-SosApp-v.1.git/utility/token"
+	jwt "github.com/golang-jwt/jwt"
 	"github.com/labstack/echo/v4"
 	"github.com/labstack/echo/v4/middleware"
 	config "github.com/spf13/viper"
 	"github.com/tylerb/graceful"
+	"net/http"
 	"time"
 )
 
@@ -24,8 +27,16 @@ func NewControllerMain(ctrl Controller) {
 	// "/user"
 	u := r.Group(config.GetString("role.user"))
 	{
+		config := middleware.JWTConfig{
+			Claims:     &token.JwtCustomClaims{},
+			SigningKey: []byte(config.GetString("jwt.secret")),
+		}
+		r.Use(middleware.JWTWithConfig(config))
 		u.GET("/name", func(c echo.Context) error {
-			return c.JSON(200, "Name")
+			user := c.Get("user").(*jwt.Token)
+			claims := user.Claims.(jwt.MapClaims)
+			name := claims["id"].(string)
+			return c.String(http.StatusOK, "Welcome "+name+"!")
 		})
 	}
 

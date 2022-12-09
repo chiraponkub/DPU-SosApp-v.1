@@ -6,14 +6,14 @@ import (
 	"time"
 )
 
-type jwtCustomClaims struct {
+type JwtCustomClaims struct {
 	ID   uint   `json:"id"`
 	Role string `json:"role"`
 	jwt.StandardClaims
 }
 
 func CreateToken(id uint, role string) (token string, Error error) {
-	claims := &jwtCustomClaims{
+	claims := &JwtCustomClaims{
 		id,
 		role,
 		jwt.StandardClaims{

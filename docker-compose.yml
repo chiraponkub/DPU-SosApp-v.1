@@ -26,5 +26,4 @@ services:
     volumes:
       - './:/SosApp'
     ports:
-      - "80:80"
-
+      - "8123:8123"

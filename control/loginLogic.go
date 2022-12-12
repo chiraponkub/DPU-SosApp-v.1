@@ -1,16 +1,16 @@
-package restapi
+package control
 
 import (
+	"github.com/chiraponkub/DPU-SosApp-v.1.git/db/structureDAO"
 	singin "github.com/chiraponkub/DPU-SosApp-v.1.git/restapi/model/singin/request"
-	rdbmsstructure "github.com/chiraponkub/DPU-SosApp-v.1.git/restapi/structureDAO"
 	"github.com/chiraponkub/DPU-SosApp-v.1.git/utility/token"
 	"github.com/chiraponkub/DPU-SosApp-v.1.git/utility/verify"
 	"gorm.io/gorm"
 )
 
-func (ctrl Controller) LoginLogic(request *singin.Login) (Token string, Error error) {
+func (ctrl ConController) LoginLogic(request *singin.Login) (Token string, Error error) {
 
-	db := rdbmsstructure.Account{
+	db := structureDAO.Account{
 		PhoneNumber: request.Username,
 	}
 
@@ -26,7 +26,7 @@ func (ctrl Controller) LoginLogic(request *singin.Login) (Token string, Error er
 		return
 	}
 
-	roleStr := rdbmsstructure.Role{
+	roleStr := structureDAO.Role{
 		Model: gorm.Model{
 			ID: account.RoleID,
 		},

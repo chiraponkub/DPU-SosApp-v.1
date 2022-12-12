@@ -1,11 +1,11 @@
-package restapi
+package control
 
 import (
 	"errors"
 	"github.com/chiraponkub/DPU-SosApp-v.1.git/common"
+	rdbmsstructure "github.com/chiraponkub/DPU-SosApp-v.1.git/db/structureDAO"
 	"github.com/chiraponkub/DPU-SosApp-v.1.git/restapi/model/singup/request"
 	response "github.com/chiraponkub/DPU-SosApp-v.1.git/restapi/model/singup/response"
-	rdbmsstructure "github.com/chiraponkub/DPU-SosApp-v.1.git/restapi/structureDAO"
 	"github.com/chiraponkub/DPU-SosApp-v.1.git/utility/verify"
 	"math/rand"
 	"strconv"
@@ -16,7 +16,7 @@ func rangeIn(low, hi int) int {
 	return low + rand.Intn(hi-low)
 }
 
-func (ctrl Controller) SentOTPLogic(req *request.PhoneNumber) (res response.OTP, Error error) {
+func (ctrl ConController) SentOTPLogic(req *request.PhoneNumber) (res response.OTP, Error error) {
 	Check, err := common.CheckPhoneNumber(req.PhoneNumber)
 	if !Check {
 		Error = errors.New("PhoneNumber Invalid. : 10 Numbers 0-9")
@@ -66,7 +66,7 @@ func (ctrl Controller) SentOTPLogic(req *request.PhoneNumber) (res response.OTP,
 	return
 }
 
-func (ctrl Controller) VerifyOTPLogic(req *request.OTP) (Error error) {
+func (ctrl ConController) VerifyOTPLogic(req *request.OTP) (Error error) {
 	checkNumber, err := common.CheckPhoneNumber(req.PhoneNumber)
 	if !checkNumber {
 		Error = err
@@ -104,7 +104,7 @@ func (ctrl Controller) VerifyOTPLogic(req *request.OTP) (Error error) {
 	return
 }
 
-func (ctrl Controller) CreateUserLogin(req *request.Account) (Error error) {
+func (ctrl ConController) CreateUserLogin(req *request.Account) (Error error) {
 
 	db := rdbmsstructure.OTP{
 		PhoneNumber: req.PhoneNumber,

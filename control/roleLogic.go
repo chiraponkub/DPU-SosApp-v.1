@@ -1,15 +1,15 @@
-package restapi
+package control
 
 import (
 	"errors"
 	"github.com/chiraponkub/DPU-SosApp-v.1.git/constant"
+	rdbmsstructure "github.com/chiraponkub/DPU-SosApp-v.1.git/db/structureDAO"
 	"github.com/chiraponkub/DPU-SosApp-v.1.git/restapi/model/role/request"
 	response "github.com/chiraponkub/DPU-SosApp-v.1.git/restapi/model/role/response"
-	rdbmsstructure "github.com/chiraponkub/DPU-SosApp-v.1.git/restapi/structureDAO"
 	"strings"
 )
 
-func (ctrl Controller) AddRoleCon(req *request.AddRole) (Error error) {
+func (ctrl ConController) AddRoleCon(req *request.AddRole) (Error error) {
 	var newReq rdbmsstructure.Role
 	newReq.Name = strings.ToLower(req.Name)
 
@@ -30,7 +30,7 @@ func (ctrl Controller) AddRoleCon(req *request.AddRole) (Error error) {
 	return
 }
 
-func (ctrl Controller) GetRoleListCon() (res response.ResponseMain, Error error) {
+func (ctrl ConController) GetRoleListCon() (res response.ResponseMain, Error error) {
 	data, err := ctrl.Access.RDBMS.GetRoleListDB()
 	if err != nil {
 		Error = err

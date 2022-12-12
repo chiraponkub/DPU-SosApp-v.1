@@ -26,7 +26,7 @@ func (ctrl Controller) SendOTP(c echo.Context) error {
 	}
 	logs.LogRequest(request)
 
-	resp, err := ctrl.SentOTPLogic(request)
+	resp, err := ctrl.Ctx.SentOTPLogic(request)
 	if err != nil {
 		res.Code = constant.ErrorCode
 		res.Msg = err.Error()
@@ -58,7 +58,7 @@ func (ctrl Controller) VerifyOTP(c echo.Context) error {
 		return response.EchoError(c, 400, res)
 	}
 
-	err = ctrl.VerifyOTPLogic(request)
+	err = ctrl.Ctx.VerifyOTPLogic(request)
 	if err != nil {
 		res.Code = constant.ErrorCode
 		res.Msg = err.Error()
@@ -86,7 +86,7 @@ func (ctrl Controller) CreateUser(c echo.Context) error {
 		return response.EchoError(c, 400, res)
 	}
 
-	err = ctrl.CreateUserLogin(request)
+	err = ctrl.Ctx.CreateUserLogin(request)
 	if err != nil {
 		res.Code = constant.ErrorCode
 		res.Msg = err.Error()

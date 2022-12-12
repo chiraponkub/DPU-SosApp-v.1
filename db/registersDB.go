@@ -1,8 +1,8 @@
-package restapi
+package db
 
 import (
 	"errors"
-	"github.com/chiraponkub/DPU-SosApp-v.1.git/restapi/structureDAO"
+	"github.com/chiraponkub/DPU-SosApp-v.1.git/db/structureDAO"
 	"gorm.io/gorm"
 )
 

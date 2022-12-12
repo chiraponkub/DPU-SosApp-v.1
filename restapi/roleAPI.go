@@ -21,7 +21,7 @@ func (ctrl Controller) AddRole(c echo.Context) error {
 		res.Msg = err.Error()
 		return response.EchoError(c, 400, res)
 	}
-	err = ctrl.AddRoleCon(request)
+	err = ctrl.Ctx.AddRoleCon(request)
 	if err != nil {
 		res.Code = constant.ErrorCode
 		res.Msg = err.Error()
@@ -34,7 +34,7 @@ func (ctrl Controller) AddRole(c echo.Context) error {
 }
 
 func (ctrl Controller) GetRoleList(c echo.Context) error {
-	responses, err := ctrl.GetRoleListCon()
+	responses, err := ctrl.Ctx.GetRoleListCon()
 	if err != nil {
 		return response.EchoError(c, 400, err.Error())
 	}

@@ -1,6 +1,6 @@
 service:
   name: "SosApp"
-  port: 8123
+  port: 81
   endpoint: "/SosApp"
 
 token:

@@ -1,7 +1,7 @@
 package control
 
 import (
-	"github.com/chiraponkub/DPU-SosApp-v.1.git/db/structureDAO"
+	"github.com/chiraponkub/DPU-SosApp-v.1.git/db/structure"
 	singin "github.com/chiraponkub/DPU-SosApp-v.1.git/restapi/model/singin/request"
 	"github.com/chiraponkub/DPU-SosApp-v.1.git/utility/token"
 	"github.com/chiraponkub/DPU-SosApp-v.1.git/utility/verify"
@@ -10,7 +10,7 @@ import (
 
 func (ctrl ConController) LoginLogic(request *singin.Login) (Token string, Error error) {
 
-	db := structureDAO.Account{
+	db := structure.Account{
 		PhoneNumber: request.Username,
 	}
 
@@ -26,7 +26,7 @@ func (ctrl ConController) LoginLogic(request *singin.Login) (Token string, Error
 		return
 	}
 
-	roleStr := structureDAO.Role{
+	roleStr := structure.Role{
 		Model: gorm.Model{
 			ID: account.RoleID,
 		},

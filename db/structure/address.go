@@ -1,4 +1,4 @@
-package structureDAO
+package structure
 
 import (
 	"gorm.io/gorm"

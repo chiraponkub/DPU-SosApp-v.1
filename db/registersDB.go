@@ -2,12 +2,12 @@ package db
 
 import (
 	"errors"
-	"github.com/chiraponkub/DPU-SosApp-v.1.git/db/structureDAO"
+	"github.com/chiraponkub/DPU-SosApp-v.1.git/db/structure"
 	"gorm.io/gorm"
 )
 
-func (factory GORMFactory) SendOTPDB(req structureDAO.OTP) (Error error) {
-	var data []structureDAO.OTP
+func (factory GORMFactory) SendOTPDB(req structure.OTP) (Error error) {
+	var data []structure.OTP
 	db := factory.client.Model(&data).Where("phone_number = ?", req.PhoneNumber).Update("active", false).Error
 	if db != nil {
 		Error = db
@@ -24,8 +24,8 @@ func (factory GORMFactory) SendOTPDB(req structureDAO.OTP) (Error error) {
 	return
 }
 
-func (factory GORMFactory) GetOTPDB(req structureDAO.OTP) (response *structureDAO.OTP, Error error) {
-	var data = new(structureDAO.OTP)
+func (factory GORMFactory) GetOTPDB(req structure.OTP) (response *structure.OTP, Error error) {
+	var data = new(structure.OTP)
 	err := factory.client.Where("phone_number = ? and active = ?", req.PhoneNumber, true).Find(&data).Error
 	if err != nil {
 		if !errors.Is(err, gorm.ErrRecordNotFound) {
@@ -40,8 +40,8 @@ func (factory GORMFactory) GetOTPDB(req structureDAO.OTP) (response *structureDA
 	return
 }
 
-func (factory GORMFactory) UpdateOTPDB(req structureDAO.OTP) (Error error) {
-	var data structureDAO.OTP
+func (factory GORMFactory) UpdateOTPDB(req structure.OTP) (Error error) {
+	var data structure.OTP
 	db := factory.client.Where("phone_number = ? and key = ? and verify_code = ? and active = ?", req.PhoneNumber, req.Key, req.VerifyCode, true).Take(&data).Error
 	if db != nil {
 		if !errors.Is(db, gorm.ErrRecordNotFound) {
@@ -61,7 +61,7 @@ func (factory GORMFactory) UpdateOTPDB(req structureDAO.OTP) (Error error) {
 	return
 }
 
-func (factory GORMFactory) CreateUserDB(req structureDAO.Account) (Error error) {
+func (factory GORMFactory) CreateUserDB(req structure.Account) (Error error) {
 	err := factory.client.Session(&gorm.Session{FullSaveAssociations: true}).Save(&req).Error
 	if err != nil {
 		if !errors.Is(err, gorm.ErrRegistered) {

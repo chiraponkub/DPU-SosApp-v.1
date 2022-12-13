@@ -6,8 +6,8 @@ import (
 	"gorm.io/gorm"
 )
 
-func (factory GORMFactory) GetAccountDB(req structure.Account) (response *structure.Account, Error error) {
-	var data = new(structure.Account)
+func (factory GORMFactory) GetAccountDB(req structure.Users) (response *structure.Users, Error error) {
+	var data = new(structure.Users)
 	err := factory.client.Where("phone_number = ?", req.PhoneNumber).Find(&data).Error
 	if err != nil {
 		if !errors.Is(err, gorm.ErrRecordNotFound) {

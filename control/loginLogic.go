@@ -10,7 +10,7 @@ import (
 
 func (ctrl ConController) LoginLogic(request *singin.Login) (Token string, Error error) {
 
-	db := structure.Account{
+	db := structure.Users{
 		PhoneNumber: request.Username,
 	}
 

@@ -125,7 +125,7 @@ func (ctrl ConController) CreateUserLogin(req *request.Account) (Error error) {
 
 	hashPass, err := verify.Hash(req.Password)
 
-	newReq := rdbmsstructure.Account{
+	newReq := rdbmsstructure.Users{
 		PhoneNumber: req.PhoneNumber,
 		Password:    string(hashPass),
 		FirstName:   req.FirstName,

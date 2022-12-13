@@ -61,7 +61,7 @@ func (factory GORMFactory) UpdateOTPDB(req structure.OTP) (Error error) {
 	return
 }
 
-func (factory GORMFactory) CreateUserDB(req structure.Account) (Error error) {
+func (factory GORMFactory) CreateUserDB(req structure.Users) (Error error) {
 	err := factory.client.Session(&gorm.Session{FullSaveAssociations: true}).Save(&req).Error
 	if err != nil {
 		if !errors.Is(err, gorm.ErrRegistered) {

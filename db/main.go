@@ -28,10 +28,10 @@ type FactoryInterface interface {
 	UpdateOTPDB(req structure.OTP) (Error error)
 
 	// CreateUser
-	CreateUserDB(req structure.Account) (Error error)
+	CreateUserDB(req structure.Users) (Error error)
 
-	// Account
-	GetAccountDB(req structure.Account) (response *structure.Account, Error error)
+	// Users
+	GetAccountDB(req structure.Users) (response *structure.Users, Error error)
 }
 
 func Create(env *Properties) FactoryInterface {
@@ -62,7 +62,7 @@ func gormInstance(env *Properties) GORMFactory {
 	//}
 	_ = db.AutoMigrate(
 		&structure.Role{},
-		&structure.Account{},
+		&structure.Users{},
 		&structure.Address{},
 		&structure.OTP{},
 		&structure.LogLogin{},
@@ -92,7 +92,7 @@ func gormInstance(env *Properties) GORMFactory {
 		db.Session(&gorm.Session{FullSaveAssociations: true}).Save(&address)
 		db.Where("name = ?", "admin").Take(&role)
 		Password, _ := verify.Hash("BELLkub4424506")
-		data := structure.Account{
+		data := structure.Users{
 			Email:       nil,
 			PhoneNumber: "0815476439",
 			Password:    string(Password),

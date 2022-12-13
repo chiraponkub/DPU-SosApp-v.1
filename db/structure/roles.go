@@ -6,5 +6,6 @@ import (
 
 type Role struct {
 	gorm.Model
-	Name string
+	Name      string
+	DeletedBy int
 }
